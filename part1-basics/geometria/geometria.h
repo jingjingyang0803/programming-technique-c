@@ -1,6 +1,8 @@
 #ifndef GEOMETRIA_H
 #define GEOMETRIA_H
 
+extern const long double PII;
+
 /*
 Calculate the area of a circle based on the radius.
 */
@@ -11,4 +13,4 @@ Calculate the volume of a sphere based on the radius.
 */
 double pallonTilavuus(double r);
 
-#endif // GEOMETRIA_H
+#endif /* GEOMETRIA_H */

@@ -1,6 +1,7 @@
 #include "geometria.h"
-#include <math.h>
 
-double ympyranAla(double r) { return M_PI * r * r; }
+const long double PII = 3.1415926535897932385L;
 
-double pallonTilavuus(double r) { return (4.0 / 3.0) * M_PI * r * r * r; }
+double ympyranAla(double r) { return PII * r * r; }
+
+double pallonTilavuus(double r) { return (4.0 / 3.0) * PII * r * r * r; }
