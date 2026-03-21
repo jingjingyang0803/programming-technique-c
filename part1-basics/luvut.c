@@ -20,7 +20,8 @@ int main(void) {
   const int MIN = 1;
   const int MAX = 100;
 
-  for (int i = MIN; i <= MAX; i++) {
+  int i;
+  for (i = MIN; i <= MAX; i++) {
     if (i % 2 != 0 && i % 3 != 0 && i % 5 != 0) {
       if (first_printed) {
         printf(" ");
