@@ -14,18 +14,22 @@ number 10 is not printed because it is divisible by both 2 and 5, and the number
 1 7 11 13 17 19 23 29 31 37
 */
 #include <stdio.h>
+
 int main(void) {
+  int first_printed = 0;
+  const int MIN = 1;
   const int MAX = 100;
 
-  for (int i = 1; i <= MAX; i++) {
+  for (int i = MIN; i <= MAX; i++) {
     if (i % 2 != 0 && i % 3 != 0 && i % 5 != 0) {
-      printf("%d ", i);
-    }
-
-    if (i == MAX) {
-      printf("\n");
+      if (first_printed) {
+        printf(" ");
+      }
+      printf("%d", i);
+      first_printed = 1;
     }
   }
+  printf("\n");
 
   return 0;
 }
