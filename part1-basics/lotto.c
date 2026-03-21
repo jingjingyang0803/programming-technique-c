@@ -14,12 +14,16 @@ ascending order).
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char *argv[]) {
-  int i, j, count = 0;
-  int winning[7], ticket[7];
-  int correct[7];
+#define NUM_COUNT 7
 
-  if (argc != 15) {
+int main(int argc, char *argv[]) {
+  int i, j, count;
+  count = 0;
+
+  int winning[NUM_COUNT], ticket[NUM_COUNT];
+  int correct[NUM_COUNT];
+
+  if (argc != NUM_COUNT * 2 + 1) {
     printf("Usage: %s win1 win2 win3 win4 win5 win6 win7 "
            "ticket1 ticket2 ticket3 ticket4 ticket5 ticket6 ticket7\n",
            argv[0]);
@@ -27,27 +31,27 @@ int main(int argc, char *argv[]) {
   }
 
   /* Parse the winning numbers and the lottery ticket numbers */
-  for (i = 0; i < 7; i++) {
+  for (i = 0; i < NUM_COUNT; i++) {
     winning[i] = atoi(argv[i + 1]);
-    ticket[i] = atoi(argv[i + 8]);
+    ticket[i] = atoi(argv[i + NUM_COUNT + 1]);
   }
 
   /* Print the winning numbers */
   printf("Voittorivi:");
-  for (i = 0; i < 7; i++) {
+  for (i = 0; i < NUM_COUNT; i++) {
     printf(" %d", winning[i]);
   }
 
   /* Print the lottery ticket numbers */
   printf("\nLottorivi:");
-  for (i = 0; i < 7; i++) {
+  for (i = 0; i < NUM_COUNT; i++) {
     printf(" %d", ticket[i]);
   }
   printf("\n");
 
   /* Store and count the correct numbers */
-  for (i = 0; i < 7; i++) {
-    for (j = 0; j < 7; j++) {
+  for (i = 0; i < NUM_COUNT; i++) {
+    for (j = 0; j < NUM_COUNT; j++) {
       if (ticket[i] == winning[j]) {
         correct[count] = ticket[i];
         count++;
