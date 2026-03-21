@@ -4,7 +4,7 @@ followed by one or more numbers, and which prints each number received after x
 togehter with its square root using x decimals of precision. The numbers are
 processed in the order they were entered on the command line.
 */
-#include <math.h>s
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
