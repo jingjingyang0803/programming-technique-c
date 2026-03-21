@@ -18,7 +18,7 @@ int main(void) {
   const int MIN = 1;
   const int MAX = 15;
 
-  // Print the header row
+  /* Print the header row */
   int i, j;
   printf("   x");
   for (i = MIN; i <= MAX; i++) {
@@ -26,11 +26,11 @@ int main(void) {
   }
   printf("\n");
 
-  // Print the multiplication table
+  /* Print the multiplication table */
   for (i = MIN; i <= MAX; i++) {
-    // Print the header column
+    /* Print the header column */
     printf("%4d", i);
-    // Print the multiplication results for the current row
+    /* Print the multiplication results for the current row */
     for (j = MIN; j <= MAX; j++) {
       printf("%4d", i * j);
     }
