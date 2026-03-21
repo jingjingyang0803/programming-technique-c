@@ -29,14 +29,14 @@ int main(int argc, char *argv[]) {
 
   for (i = a; i <= b; i++) {
     int divisible = 0;
-    // Check if i is divisible by any of the numbers provided after a and b
+    /* Check if i is divisible by any of the numbers provided after a and b */
     for (j = 3; j < argc; j++) {
       if (i % atoi(argv[j]) == 0) {
         divisible = 1;
         break;
       }
     }
-    // If i is not divisible by any of the provided numbers, print it
+    /* If i is not divisible by any of the provided numbers, print it */
     if (!divisible) {
       if (first_printed) {
         printf(" ");
@@ -45,6 +45,10 @@ int main(int argc, char *argv[]) {
       first_printed = 1;
     }
   }
-  printf("\n");
+  /* Print a line break only if at least one number was printed */
+  if (first_printed) {
+    printf("\n");
+  }
+
   return 0;
 }
