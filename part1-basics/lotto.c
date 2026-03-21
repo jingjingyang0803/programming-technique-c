@@ -18,10 +18,10 @@ ascending order).
 
 int main(int argc, char *argv[]) {
   int i, j, count;
-  count = 0;
-
   int winning[NUM_COUNT], ticket[NUM_COUNT];
   int correct[NUM_COUNT];
+
+  count = 0;
 
   if (argc != NUM_COUNT * 2 + 1) {
     printf("Usage: %s win1 win2 win3 win4 win5 win6 win7 "
