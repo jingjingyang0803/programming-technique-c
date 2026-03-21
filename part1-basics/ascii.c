@@ -9,20 +9,22 @@ values ​​for the char variable type (ie. they are not too large).
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
+  int a, b;
+  int i;
+
   if (argc != 3) {
     printf("Usage: %s a b\n", argv[0]);
     return 1;
   }
 
-  int a = atoi(argv[1]);
-  int b = atoi(argv[2]);
+  a = atoi(argv[1]);
+  b = atoi(argv[2]);
 
   if (a > b) {
     printf("Error: a must be less than or equal to b.\n");
     return 1;
   }
 
-  int i;
   for (i = a; i <= b; i++) {
     /* Print the integer and its corresponding character */
     printf("%d: %c\n", i, (char)i);
