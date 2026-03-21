@@ -14,16 +14,19 @@ If the equation has no real solution,the message "Ei ratkaisua" is printed.
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
+  double a, b, c;
+  double discriminant;
+
   if (argc != 4) {
     printf("Usage: %s a b c\n", argv[0]);
     return 1;
   }
 
-  double a = atof(argv[1]);
-  double b = atof(argv[2]);
-  double c = atof(argv[3]);
+  a = atof(argv[1]);
+  b = atof(argv[2]);
+  c = atof(argv[3]);
 
-  double discriminant = b * b - 4 * a * c;
+  discriminant = b * b - 4 * a * c;
 
   if (discriminant < 0) {
     printf("Ei ratkaisua\n");
