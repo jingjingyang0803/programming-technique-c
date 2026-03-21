@@ -18,9 +18,11 @@ which number (or numbers) occurred most often
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_N 1000
+
 int main(int argc, char *argv[]) {
-  double numbers[argc - 1];
-  int count[argc - 1];
+  double numbers[MAX_N];
+  int count[MAX_N];
   double min, max;
   int i, j;
   int has_unique, max_count;
