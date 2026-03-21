@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
   }
 
   /* Print the top row of the table */
-  for (i = 1; i <= width; i++) {
+  for (i = 0; i <= width; i++) {
     printf(" ");
   }
   for (i = a; i <= b; i++) {
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 
   /* Print the multiplication table */
   for (i = c; i <= d; i++) {
-    printf("%*d", width, i);
+    printf(" %*d", width, i);
     for (j = a; j <= b; j++) {
       printf(" %*d", width, i * j);
     }
