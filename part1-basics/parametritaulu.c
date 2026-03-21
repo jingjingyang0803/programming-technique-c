@@ -33,7 +33,7 @@ Example output:
 #include <string.h>
 
 int main(int argc, char *argv[]) {
-  int i;
+  int i, j;
   int total_params;
   int max_index_width;
   int max_param_width;
@@ -65,7 +65,6 @@ int main(int argc, char *argv[]) {
     /* Print the separator line after each parameter except the last one */
     if (i < argc - 1) {
       printf("#-");
-      int j;
       for (j = 0; j < max_index_width; j++) {
         printf("-");
       }
