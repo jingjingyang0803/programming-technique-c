@@ -11,15 +11,17 @@ string is assumed to describe a two's complement representation of an integer.
 int main(int argc, char *argv[]) {
   size_t len;
   size_t i;
+  char *binary_str;
+  int value;
 
   if (argc != 2) {
     fprintf(stderr, "Usage: %s <binary_string>\n", argv[0]);
     return 1;
   }
 
-  char *binary_str = argv[1];
+  binary_str = argv[1];
   len = strlen(binary_str);
-  int value = 0;
+  value = 0;
 
   /* Check if the string is valid (only '0' and '1') */
   for (i = 0; i < len; i++) {
