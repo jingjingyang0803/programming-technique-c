@@ -15,6 +15,7 @@ void ucharIntervalli(unsigned char r, unsigned char s) {
     /* If next < i, then an overflow has occurred and we have wrapped around
        to the non-negative side. */
     if (next < i) {
+      i = next;
       break;
     }
     i = next;
