@@ -20,6 +20,7 @@ void scharBitit(signed char x) {
       count_1++;
     }
   }
+  printf("\n");
 
   /* Output the number of 0 bits and 1 bits */
   printf("%d\n", count_0);
@@ -46,6 +47,7 @@ void shortBitit(short int x) {
       count_1++;
     }
   }
+  printf("\n");
 
   /* Output the number of 0 bits and 1 bits */
   printf("%d\n", count_0);
@@ -72,6 +74,7 @@ void intBitit(int x) {
       count_1++;
     }
   }
+  printf("\n");
 
   /* Output the number of 0 bits and 1 bits */
   printf("%d\n", count_0);
@@ -98,6 +101,7 @@ void longBitit(long int x) {
       count_1++;
     }
   }
+  printf("\n");
 
   /* Output the number of 0 bits and 1 bits */
   printf("%d\n", count_0);
