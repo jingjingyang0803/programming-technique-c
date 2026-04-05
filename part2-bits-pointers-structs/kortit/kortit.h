@@ -5,22 +5,22 @@ EXERCISE: Cards
 #define KORTIT_H
 
 /* Defines the four suits. */
-typedef enum { HERTTA = 1, RISTI, RUUTU, PATA } Maa;
+typedef enum { HERTTA = 1, RUUTU, RISTI, PATA } Maa;
 
 /* Defines the thirteen ranks. */
 typedef enum {
   ASSA = 1,
-  KAKSI,
-  KOLME,
-  NELJA,
-  VIISI,
-  KUUSI,
-  SEITSEMA,
-  KAHDEKSAN,
-  YHDEKSAN,
-  KYMMENEN,
+  KAKKONEN,
+  KOLMONEN,
+  NELONEN,
+  VIITONEN,
+  KUUTONEN,
+  SEISKA,
+  KASI,
+  YSI,
+  KYMPPI,
   JATKA,
-  PRINSSI,
+  ROUVA,
   KUNKKU
 } Arvo;
 
@@ -29,7 +29,7 @@ enum { MAA_LKM = 4, MAA_KOKO = 13, KORTTI_LKM = MAA_LKM * MAA_KOKO };
 
 /* Names of the suits and ranks for printing. */
 extern const char *MAIDEN_NIMET[MAA_LKM + 1];
-extern const char *ARVOJEN_NIMET[MAA_KOKO + 1];
+extern const char *KORTTIEN_NIMET[MAA_KOKO + 1];
 
 /* Defines a card with a suit and a rank. */
 typedef struct {
