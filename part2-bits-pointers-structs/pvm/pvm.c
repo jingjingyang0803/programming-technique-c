@@ -11,6 +11,9 @@ const unsigned int PV_KK[2][13] = {
 /* Weekday abbreviations in Finnish. */
 const char *VK_PV[7] = {"su", "ma", "ti", "ke", "to", "pe", "la"};
 
+/* Reference date: 1.1.1000 () */
+const Pvm REFERENCE_DATE = {1, 1, 1000, ""};
+
 /* Helper function: Determines if a given year is a leap year. */
 int isLeapYear(unsigned int year) {
   return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
@@ -45,10 +48,33 @@ void laske_viikonpaiva(Pvm *p) {
 
   /* Zeller: 0=Sunday */
   vk_index =
-      h %
+      (h + 6) %
       7; /* Map Zeller's output to our weekday index (0=su, 1=ma, ..., 6=la) */
 
   strcpy(p->vk_pv, VK_PV[vk_index]);
+}
+
+/* Helper function: Converts a date to the total number of days since a
+ * reference date. */
+unsigned int dateToDays(const Pvm *p) {
+  unsigned int total;
+  unsigned int month;
+  unsigned int year;
+
+  /* Step 1: Start with the day of the month. */
+  total = p->pv;
+
+  /* Step 2: Add the days in the months of the current year. */
+  for (month = 1; month < p->kk; month++) {
+    total += PV_KK[isLeapYear(p->vuosi)][month];
+  }
+
+  /* Step 3: Add the days in the years before the current year. */
+  for (year = REFERENCE_DATE.vuosi; year < p->vuosi; year++) {
+    total += isLeapYear(year) ? 366 : 365;
+  }
+
+  return total;
 }
 
 Pvm *kasvataPvm(Pvm *p) {
@@ -77,38 +103,11 @@ Pvm *kasvataPvm(Pvm *p) {
  * to each date and return the absolute difference. */
 unsigned int pvmEro(const Pvm *a, const Pvm *b) {
   unsigned int days_a, days_b;
-  unsigned int year;
 
-  /* Step 1: Initialize the day counters with the day of the month. */
-  days_a = a->pv;
-  days_b = b->pv;
+  days_a = dateToDays(a);
+  days_b = dateToDays(b);
 
-  /* Step 2: Add the days in the preceding months for each date. */
-  for (year = 1; year < a->kk; ++year) {
-    days_a += PV_KK[isLeapYear(a->vuosi)][year];
-  }
-  for (year = 1; year < b->kk; ++year) {
-    days_b += PV_KK[isLeapYear(b->vuosi)][year];
-  }
-
-  /* Step 3: Add the days for each year from the reference year to the given
-   * year. */
-  for (year = 1900; year < a->vuosi; ++year) {
-    if (isLeapYear(year)) {
-      days_a += 366;
-    } else {
-      days_a += 365;
-    }
-  }
-  for (year = 1900; year < b->vuosi; ++year) {
-    if (isLeapYear(year)) {
-      days_b += 366;
-    } else {
-      days_b += 365;
-    }
-  }
-
-  /* Step 4: Return the absolute difference in days. */
+  /* Return the absolute difference in days. */
   return (days_a > days_b) ? (days_a - days_b) : (days_b - days_a);
 }
 
