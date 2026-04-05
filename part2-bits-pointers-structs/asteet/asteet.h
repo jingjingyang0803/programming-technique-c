@@ -9,7 +9,7 @@ typedef enum { Celsius, Fahrenheit, Kelvin } Asteikko;
 
 /* Defines a temperature with a value and a scale */
 typedef struct {
-  float arvo;
+  float lampotila;
   Asteikko asteikko;
 } Lampotila;
 
