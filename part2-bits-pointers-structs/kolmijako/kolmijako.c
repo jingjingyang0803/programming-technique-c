@@ -1,71 +1,84 @@
 #include "kolmijako.h"
-#include <stdio.h>
 
 IntPari kolmijako(unsigned int n, int t[], int pivot1, int pivot2, int *p1,
                   int *p2) {
-  int p1_val, p2_val; /* Values at the pivot indices. */
-  int low, high;      /* Indices for the three-way partitioning. */
-  int current;        /* Current index for iterating through the array. */
   IntPari result;
+  unsigned int less1,
+      less2; /* Indices for the first and second pivots after partitioning. */
+  int i;
+  int temp;
 
   /* Swap pivots if necessary to ensure value at pivot1 <= value at pivot2 */
   if (t[pivot1] > t[pivot2]) {
-    int temp = pivot1;
+    temp = pivot1;
     pivot1 = pivot2;
     pivot2 = temp;
   }
 
-  p1_val = t[pivot1]; /* Value at pivot1. */
-  p2_val = t[pivot2]; /* Value at pivot2. */
+  /* First pass: Move elements less than the first pivot to the front. */
+  less1 = 0;
+  for (i = 0; i < n; ++i) {
+    if (t[i] < t[pivot1]) { /* Current element belongs to the first part. */
+      /* Swap the current element with the element at index less1. */
+      temp = t[i];
+      t[i] = t[less1];
+      t[less1] = temp;
 
-  low = 0;           /* Initial index for the first part as first element */
-  high = (int)n - 1; /* Initial index for the last part as last element */
+      /* Update pivot indices if they were swapped. */
+      if (pivot1 == less1) {
+        pivot1 = i;
+      } else if (pivot2 == less1) {
+        pivot2 = i;
+      }
 
-  /* Iterate through the array and partition it into three parts */
-  current = 0;
-  while (current <= high) {
-    if (t[current] < p1_val) {
-      /* Current element belongs to the first part.
-       * Swap it with the element at index low.
-       * Both low and current can be advanced,
-       * because the element moved to current has already been processed. */
-      int temp = t[low];
-      t[low] = t[current];
-      t[current] = temp;
-      low++;
-      current++;
-    } else if (t[current] >= p2_val) {
-      /* Current element belongs to the last part.
-       * Swap it with the element at index high.
-       * Only decrease high, do NOT advance current,
-       * because the element swapped into current has not been processed yet. */
-      int temp = t[current];
-      t[current] = t[high];
-      t[high] = temp;
-      high--;
-    } else {
-      /* Current element belongs to the middle part.
-       * It is already in the correct region, so just move forward. */
-      current++;
+      /* Move the boundary of the first part forward. */
+      less1++;
     }
   }
 
-  /* After partitioning:
-   * - Elements at indices [0, low) are less than p1_val.
-   * - Elements at indices [low, high] are between p1_val and p2_val.
-   * - Elements at indices (high, n-1] are greater than or equal to p2_val.
-   * Therefore:
-   * - The first element in the middle part is at index low.
-   * - The first element in the last part is at index high + 1. */
-  result.x = low;
-  result.y = high + 1;
+  /* Move the first pivot to its final position. */
+  temp = t[less1];
+  t[less1] = t[pivot1];
+  t[pivot1] = temp;
+
+  /* Update pivot2 if it was swapped with the first pivot. */
+  if (pivot2 == less1) {
+    pivot2 = pivot1;
+  }
+
+  /* Second pass: Move elements less than the second pivot (but greater than or
+   * equal to the first pivot) to the middle. */
+  less2 = less1 + 1; /* Start of the middle part. */
+  for (i = less2; i < (int)n; ++i) {
+    if (t[i] < t[pivot2]) { /* Current element belongs to the middle part. */
+      /* Swap the current element with the element at index less2. */
+      temp = t[i];
+      t[i] = t[less2];
+      t[less2] = temp;
+
+      if (pivot2 == less2) {
+        pivot2 = i;
+      }
+
+      less2++;
+    }
+  }
+
+  /* Move the second pivot to its final position. */
+  temp = t[less2];
+  t[less2] = t[pivot2];
+  t[pivot2] = temp;
+
+  /* Set the return values. */
+  result.x = less1;
+  result.y = less2;
 
   /* Update the values pointed to by p1 and p2 if they are not null pointers. */
   if (p1 != 0) {
-    *p1 = result.x;
+    *p1 = less1;
   }
   if (p2 != 0) {
-    *p2 = result.y;
+    *p2 = less2;
   }
 
   return result;
