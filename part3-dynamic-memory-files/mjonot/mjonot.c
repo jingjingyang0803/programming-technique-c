@@ -4,7 +4,7 @@
 #include <string.h>
 
 char **kopioi_mjt(char **merkkijonot, int koko) {
-  int i = 0;
+  int i, j;
   char **kopiot; /* Declare a pointer to an array of strings (array of char
                     pointers). */
   size_t len;
@@ -23,7 +23,7 @@ char **kopioi_mjt(char **merkkijonot, int koko) {
     if (kopiot[i] == NULL) {
       /* If memory allocation fails, free previously allocated memory and return
        * NULL. */
-      for (int j = 0; j < i; ++j) {
+      for (j = 0; j < i; ++j) {
         free(kopiot[j]); /* Free previously allocated strings. */
       }
       free(kopiot); /* Free the array of string pointers. */
