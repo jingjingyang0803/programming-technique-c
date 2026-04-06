@@ -6,6 +6,6 @@ EXERCISE: Quicksort
 
 /* Sorts the array t from index start to index end in non-decreasing order using
  * the quicksort algorithm. */
-void Pikalajittele(int start, int end, int t[]);
+void pikalajittele(int start, int end, int t[]);
 
 #endif /* PIKALAJ_H */

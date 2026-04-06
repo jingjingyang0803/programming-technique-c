@@ -1,7 +1,7 @@
 #include "pikalaj.h"
 #include "kolmijako.h"
 
-void Pikalajittele(int start, int end, int t[]) {
+void pikalajittele(int start, int end, int t[]) {
   int less1, less2;
   int x, y;
   int n;
@@ -21,7 +21,7 @@ void Pikalajittele(int start, int end, int t[]) {
   y = start + less2;
 
   /* Recursively sort the three parts. */
-  Pikalajittele(start, x - 1, t); /* Sort the first part. */
-  Pikalajittele(x, y - 1, t);     /* Sort the middle part. */
-  Pikalajittele(y, end, t);       /* Sort the last part. */
+  pikalajittele(start, x - 1, t); /* Sort the first part. */
+  pikalajittele(x, y - 1, t);     /* Sort the middle part. */
+  pikalajittele(y, end, t);       /* Sort the last part. */
 }
