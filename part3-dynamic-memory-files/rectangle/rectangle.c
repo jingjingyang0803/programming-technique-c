@@ -52,8 +52,8 @@ Rectangle *createRectangle4(Point origin, int width, int height) {
 }
 
 /* Function to calculate the area of a rectangle. */
-int getArea(Rectangle *rect) {
-  return rect->width * rect->height; /* Return the area (width * height). */
+int getArea(const Rectangle *r) {
+  return r->width * r->height; /* Return the area (width * height). */
 }
 
 /* Function to move a rectangle to a specified position in the x and y

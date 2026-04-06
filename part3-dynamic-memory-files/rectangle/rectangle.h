@@ -35,7 +35,7 @@ Rectangle *createRectangle3(int width, int height);
 Rectangle *createRectangle4(Point origin, int width, int height);
 
 /* Function prototype for calculating the area of a rectangle. */
-int getArea(Rectangle *rect);
+int getArea(const Rectangle *r);
 
 /* Function prototype for moving a rectangle by specified amounts in the x and y
  * directions. */
