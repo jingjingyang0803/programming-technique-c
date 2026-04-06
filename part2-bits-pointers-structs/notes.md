@@ -88,3 +88,141 @@
     - `x & 1` → check if odd (last bit)
     - `x >> 1` → divide by 2
     - `x << 1` → multiply by 2
+
+## Key learning points 2
+
+1. `CHAR_BIT` (`<limits.h>`)
+   - Number of bits in a byte (usually 8)
+   - Used with `sizeof` to get total bits
+2. `sizeof`
+   - Returns size in **bytes**, not bits
+   - Convert to bits:
+
+     ```c
+     sizeof(type) * CHAR_BIT
+     ```
+
+3. Reading a bit
+
+   ```c
+   (x >> i) & 1
+   ```
+
+   - `x >> i`
+     - shifts the binary representation of `x` right by `i` positions
+     - the bit originally at position `i` moves to the least significant bit (LSB)
+   - `& 1`
+     - masks all bits except the LSB
+     - result is either `0` or `1`
+
+   👉 So this expression extracts the value of the **i-th bit of x**
+
+   ⚠️ Important:
+   - Use **unsigned types** (e.g. `unsigned int`)
+     - signed right shift may perform **sign extension** (fill with 1s for negative numbers)
+   - Bit positions are counted from right to left:
+     - LSB = position 0
+     - next = position 1, etc.
+
+4. Printing bit representation
+
+   ```c
+   for (i = num_bits - 1; i >= 0; i--) {
+       int bit = (ux >> i) & 1;
+       printf("%d", bit);
+   }
+   ```
+
+   - Loop runs from **most significant bit (MSB)** to **least significant bit (LSB)**
+     - ensures output is in normal binary order (left → right)
+   - `num_bits` is typically:
+
+     ```c
+     sizeof(type) * CHAR_BIT
+     ```
+
+   - `ux` should be an **unsigned version of x**
+     - avoids incorrect results due to sign extension
+
+   👉 Output example:
+
+   ```
+   00000000 00000000 00000000 00001010
+   ```
+
+   ⚠️ Common mistakes:
+   - Using signed variable → wrong bits for negative numbers
+   - Loop direction wrong → reversed output
+   - Wrong `num_bits` → missing or extra bits
+
+5. Reversing bits
+
+   ```c
+   reversed |= (bit << (num_bits - 1 - i));
+   ```
+
+   - Take bit from position `i` → place at reversed position
+   - ⚠️ Use `|=` to accumulate
+
+6. Converting `'0'` / `'1'` to integer
+
+   ```c
+   value += (binary_str[i] - '0');
+   ```
+
+   - `'0'` → 0, `'1'` → 1
+   - ⚠️ Must subtract `'0'`
+
+7. Casting
+
+   ```c
+   (int)x, (short)x, (signed char)x
+   ```
+
+   - Converts type, may truncate higher bits
+   - ⚠️ Risk of overflow / data loss
+
+8. `L` suffix
+
+   ```c
+   2015L
+   ```
+
+   - Marks constant as `long`
+
+9. `extern`
+
+   ```c
+   extern const char *array[];
+   ```
+
+   - Declares variable defined in another file
+
+10. `strcasecmp`
+    - Compares strings ignoring case
+    - Returns 0 if equal
+11. `ldexp(value, exp)`
+    - Computes:
+
+      ```
+      value × 2^exp
+      ```
+
+      - Useful for IEEE 754 reconstruction
+
+12. Key bit concepts
+    - Use unsigned for bit operations
+    - Be careful with shifting signed values
+    - Always track bit positions correctly
+13. Difficult topic
+    - 3-way partitioning
+      - Split array into:
+
+        ```
+        < pivot1 | between | ≥ pivot2
+        ```
+
+      - Common mistakes:
+        - using index instead of value
+        - wrong boundaries
+        - incorrect swaps
