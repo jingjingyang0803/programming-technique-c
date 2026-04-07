@@ -7,6 +7,10 @@ Kertotaulu *luoKertotaulu(uint a, uint b, uint c, uint d) {
   uint rows, cols;                             /* Number of rows and columns. */
   uint i, j, k;                                /* Loop variables. */
 
+  if (a > b || c > d) {
+    return NULL; /* Return NULL if the input parameters are invalid. */
+  }
+
   if (kt != NULL) {
     kt->a = a;        /* Set the starting value for the columns. */
     kt->b = b;        /* Set the ending value for the columns. */
