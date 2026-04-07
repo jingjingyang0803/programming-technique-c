@@ -2,49 +2,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void tulostaKertotaulu(const Kertotaulu *kt);
+
 int main(int argc, char *argv[]) { /* argv[1]...argv[4] are assumed to give the
                                       parameters a, b, c ja d. */
-  Kertotaulu *kt;
-  uint i = 0;
-  uint j = 0;
-  uint width;
-  uint max;
+  Kertotaulu *kt; /* Declare a pointer to a Kertotaulu structure to hold the
+                     multiplication table. */
 
   if (argc != 5) {
     fprintf(stderr, "Usage: %s a b c d\n", argv[0]);
     return 1;
   }
+
   kt =
       luoKertotaulu(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]));
 
-  /* Calculate the width needed for printing the column headers and values. */
+  if (kt == NULL) {
+    fprintf(stderr, "Error creating multiplication table.\n");
+    return 1;
+  }
+
+  tulostaKertotaulu(kt);
+  tuhoaKertotaulu(kt);
+  return 0;
+}
+
+void tulostaKertotaulu(const Kertotaulu *kt) {
+  uint max, width;
+  uint i, j; /* Loop variables. */
+
+  /* Calculate the maximum value in the multiplication table to determine the
+     width needed for printing. */
+  max = (kt->b) * (kt->d);
   width = 1;
-  max = kt->b * kt->d; /* The largest value in the multiplication table is
-                          kt->b * kt->d. */
-  while (max >= 10) {  /* The largest value in the multiplication table
-                         is kt->b * kt->d. */
+  while (max >= 10) {
+    max /= 10;
     width++;
-    max /= 10; /* Reduce max to calculate the number of digits in the
-                 largest value. */
   }
-  width += 1; /* Add 1 for spacing between columns. */
-  printf("Width for printing: %u\n", width); /* Print the calculated width. */
+  width += 1; /* Add one extra space for separation. */
 
-  /* Print the column headers. */
-  printf("%*s", width, " "); /* Print the top-left corner cell. */
-  for (j = kt->a; j <= kt->b; ++j) {
-    printf("%*u", width, j);
-  }
-  printf("\n");
-
-  /* Print the multiplication table. */
-  for (i = kt->c; i <= kt->d; ++i) { /* Loop through each row. */
-    printf("%4u", i);                /* Print the row header. */
-    for (j = kt->a; j <= kt->b; ++j) {
-      printf("%*u", width, kt->kertotaulu[i - kt->c][j - kt->a]);
+  for (i = 0; i <= (kt->d - kt->c + 1); ++i) /* Rows. */
+  {
+    for (j = 0; j <= (kt->b - kt->a + 1); ++j) /* Columns. */
+    {
+      if ((i > 0) || (j > 0)) /* Check that we are not at [0][0]. */
+      {
+        printf("%*u", width,
+               kt->kertotaulu[i][j]); /* Print using calculated width. */
+      } else {
+        printf("%*s", width,
+               ""); /* The empty top left index [0][0] gets width spaces. */
+      }
     }
     printf("\n");
   }
-  tuhoaKertotaulu(kt);
-  return 0;
 }

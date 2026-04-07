@@ -2,60 +2,72 @@
 #include <stdlib.h> /* For malloc and free. */
 
 Kertotaulu *luoKertotaulu(uint a, uint b, uint c, uint d) {
-  Kertotaulu *kt = malloc(sizeof(Kertotaulu)); /* Allocate memory for a
-                                      Kertotaulu structure. */
-  uint rows, cols;                             /* Number of rows and columns. */
-  uint i, j, k;                                /* Loop variables. */
+  Kertotaulu *kt; /* Declare a pointer to a Kertotaulu structure to hold the
+                     multiplication table. */
+  uint rows, cols;
+  uint i, j, k; /* Loop variables. */
 
+  /* Return NULL if the input parameters are invalid. */
   if (a > b || c > d) {
-    return NULL; /* Return NULL if the input parameters are invalid. */
+    return NULL;
   }
 
-  if (kt != NULL) {
-    kt->a = a;        /* Set the starting value for the columns. */
-    kt->b = b;        /* Set the ending value for the columns. */
-    kt->c = c;        /* Set the starting value for the rows. */
-    kt->d = d;        /* Set the ending value for the rows. */
-    rows = d - c + 1; /* Calculate the number of rows. */
-    cols = b - a + 1; /* Calculate the number of columns. */
-    kt->kertotaulu = malloc(rows * sizeof(uint *)); /* Allocate memory for the
-                                      array of row pointers. */
-    if (kt->kertotaulu != NULL) {
-      for (i = 0; i < rows; ++i) {
-        kt->kertotaulu[i] = malloc(cols * sizeof(uint)); /* Allocate memory for
-                                    each row (array of uints). */
-        if (kt->kertotaulu[i] != NULL) {
-          for (j = 0; j < cols; ++j) {
-            kt->kertotaulu[i][j] = (c + i) * (a + j); /* Calculate the value for
-                                    each cell in the multiplication table. */
-          }
-        } else {
-          /* If memory allocation fails, free previously allocated memory and
-           * return NULL. */
-          for (k = 0; k < i; ++k) {
-            free(kt->kertotaulu[k]); /* Free previously allocated rows. */
-          }
-          free(kt->kertotaulu); /* Free the array of row pointers. */
-          free(kt);             /* Free the Kertotaulu structure. */
-          return NULL;          /* Return NULL to indicate failure. */
-        }
+  kt = malloc(sizeof(Kertotaulu));
+  if (kt == NULL) {
+    return NULL;
+  }
+
+  kt->a = a;
+  kt->b = b;
+  kt->c = c;
+  kt->d = d;
+
+  rows = d - c + 2;
+  cols = b - a + 2;
+
+  /* Allocate memory for the 2D array (array of pointers to rows). */
+  kt->kertotaulu = malloc(rows * sizeof(uint *));
+  if (kt->kertotaulu == NULL) {
+    free(kt);
+    return NULL;
+  }
+
+  /* Allocate memory for each row (array of uints). */
+  for (i = 0; i < rows; ++i) {
+    kt->kertotaulu[i] = malloc(cols * sizeof(uint));
+    if (kt->kertotaulu[i] == NULL) {
+      for (k = 0; k < i; ++k) {
+        free(kt->kertotaulu[k]);
       }
-    } else {
-      /* If memory allocation fails, free previously allocated memory and
-       * return NULL. */
-      free(kt);    /* Free the Kertotaulu structure. */
-      return NULL; /* Return NULL to indicate failure. */
+      free(kt->kertotaulu);
+      free(kt);
+      return NULL;
     }
-  } else {
-    return NULL; /* Return NULL if memory allocation for Kertotaulu structure
-                    fails. */
   }
 
-  return kt; /* Return the created Kertotaulu structure. */
+  kt->kertotaulu[0][0] = 0; /* Top-left corner placeholder */
+
+  for (j = 1; j < cols; ++j) {
+    kt->kertotaulu[0][j] = a + j - 1; /* Set the column headers. */
+  }
+
+  for (i = 1; i < rows; ++i) {
+    kt->kertotaulu[i][0] = c + i - 1; /* Set the row headers. */
+  }
+
+  for (i = 1; i < rows; ++i) {
+    for (j = 1; j < cols; ++j) {
+      kt->kertotaulu[i][j] =
+          (c + i - 1) *
+          (a + j - 1); /* Calculate the multiplication value for each cell. */
+    }
+  }
+
+  return kt;
 }
 
 void tuhoaKertotaulu(Kertotaulu *kt) {
-  uint rows = kt->d - kt->c + 1; /* Calculate the number of rows. */
+  uint rows = kt->d - kt->c + 2; /* Calculate the number of rows. */
   uint i;                        /* Loop variable. */
 
   for (i = 0; i < rows; ++i) {
