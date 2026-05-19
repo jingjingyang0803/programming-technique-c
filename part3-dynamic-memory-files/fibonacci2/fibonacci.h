@@ -1,3 +1,6 @@
+/*
+EXERCISE: Fibonacci sequence #2
+*/
 #ifndef FIBONACCI_H
 #define FIBONACCI_H
 
