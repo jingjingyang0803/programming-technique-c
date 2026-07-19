@@ -4,12 +4,8 @@
 
 int anagrammeja(char mj1[], char mj2[]) {
 
-  int balance[UCHAR_MAX + 1]; /* Array to keep track of character counts */
+  int balance[UCHAR_MAX + 1] = {0}; /* Array to keep track of character counts */
   int i;
-
-  for (i = 0; i <= UCHAR_MAX; i++) {
-    balance[i] = 0;
-  }
 
   /* Update balance array based on characters in both strings */
   for (i = 0; mj1[i] != '\0'; i++) {
