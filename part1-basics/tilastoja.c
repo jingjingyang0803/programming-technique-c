@@ -21,95 +21,87 @@ which number (or numbers) occurred most often
 #define MAX_N 1000
 
 int main(int argc, char *argv[]) {
-  double numbers[MAX_N];
-  int count[MAX_N];
-  double min, max;
-  int i, j;
-  int has_unique, max_count;
+    double numbers[MAX_N];
+    int count[MAX_N] = {0};
+    int n = argc - 1;
+    int i, j;
+    int max_count = 1;
+    double min, max;
 
-  if (argc < 2) {
-    printf("Usage: %s number1 number2 ...\n", argv[0]);
-    return 1;
-  }
-
-  /* Convert command line arguments to double and initialize count array */
-  for (i = 1; i < argc; i++) {
-    numbers[i - 1] = atof(argv[i]);
-    count[i - 1] = 0;
-  }
-
-  /* Find min and max */
-  min = max = numbers[0];
-  for (i = 1; i < argc - 1; i++) {
-    if (numbers[i] < min) {
-      min = numbers[i];
+    if (n <= 0 || n > MAX_N) {
+        printf("Usage: %s number1 number2 ...\n", argv[0]);
+        return 1;
     }
-    if (numbers[i] > max) {
-      max = numbers[i];
+
+    numbers[0] = atof(argv[1]);
+    min = max = numbers[0];
+  
+    /* Convert arguments and find min/max */
+    for (i = 0; i < n; i++) {
+        numbers[i] = atof(argv[i + 1]);
+
+        if (i == 0) {
+            min = max = numbers[i];
+        } else {
+            if (numbers[i] < min)
+                min = numbers[i];
+
+            if (numbers[i] > max)
+                max = numbers[i];
+        }
     }
-  }
 
-  /* Count occurrences of each number */
-  for (i = 0; i < argc - 1; i++) {
-    for (j = 0; j < argc - 1; j++) {
-      if (numbers[i] == numbers[j]) {
-        count[i]++;
-      }
+    printf("Pienin: %f\n", min);
+    printf("Suurin: %f\n", max);
+
+    /* Count occurrences */
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            if (numbers[i] == numbers[j])
+                count[i]++;
+        }
+
+        if (count[i] > max_count)
+            max_count = count[i];
     }
-  }
 
-  /* Check if there are any unique numbers and find the maximum count */
-  has_unique = 0;
-  max_count = 1;
-  for (i = 0; i < argc - 1; i++) {
-    if (count[i] == 1) {
-      has_unique = 1;
-    }
-    if (count[i] > max_count) {
-      max_count = count[i];
-    }
-  }
-
-  /* Print min and max */
-  printf("Pienin: %f\n", min);
-  printf("Suurin: %f\n", max);
-
-  /* Print unique numbers if there are any */
-  if (has_unique > 0) {
-    printf("Ainutlaatuiset:");
-
-    for (i = 0; i < argc - 1; i++) {
-      if (count[i] == 1) {
-        printf(" %f", numbers[i]);
-      }
-    }
-    printf("\n");
-  }
-
-  /* Print most frequently occurring numbers if there are any */
-  if (max_count > 1) {
-    printf("Useimmiten esiintyneet (%d kertaa):", max_count);
-
-    for (i = 0; i < argc - 1; i++) {
-      if (count[i] == max_count) {
-
-        /* check if already printed */
-        int seen_before = 0;
-
-        for (j = 0; j < i; j++) {
-          if (numbers[j] == numbers[i]) {
-            seen_before = 1;
+    /* Print unique numbers */
+    for (i = 0; i < n; i++) {
+        if (count[i] == 1)
             break;
-          }
-        }
-
-        if (!seen_before) {
-          printf(" %f", numbers[i]);
-        }
-      }
     }
-    printf("\n");
-  }
 
-  return 0;
+    if (i < n) {
+        printf("Ainutlaatuiset:");
+
+        for (i = 0; i < n; i++) {
+            if (count[i] == 1)
+                printf(" %f", numbers[i]);
+        }
+
+        printf("\n");
+    }
+
+    /* Print most frequent numbers */
+    if (max_count > 1) {
+        printf("Useimmiten esiintyneet (%d kertaa):", max_count);
+
+        for (i = 0; i < n; i++) {
+            if (count[i] != max_count)
+                continue;
+
+            /* Skip values already handled */
+            for (j = 0; j < i; j++) {
+                if (numbers[i] == numbers[j])
+                    break;
+            }
+
+            if (j == i)
+                printf(" %f", numbers[i]);
+        }
+
+        printf("\n");
+    }
+
+    return 0;
 }
