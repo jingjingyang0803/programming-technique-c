@@ -21,7 +21,7 @@
 
 ## Key learning points
 
-1. `p` → dereference
+1. `*p` → dereference
    - Access the value stored at the address `p` points to
 2. `&x` → address-of
    - Get the memory address of variable `x`
@@ -158,7 +158,16 @@
 5. Reversing bits
 
    ```c
-   reversed |= (bit << (num_bits - 1 - i));
+   #include <limits.h>
+
+   int num_bits = sizeof(num) * CHAR_BIT;
+   unsigned char reversed = 0;
+
+   for (int i = 0; i < num_bits; i++) {
+      unsigned char bit = (num >> i) & 1;
+      reversed |= bit << (num_bits - 1 - i);
+   }
+
    ```
 
    - Take bit from position `i` → place at reversed position
@@ -172,6 +181,17 @@
 
    - `'0'` → 0, `'1'` → 1
    - ⚠️ Must subtract `'0'`
+
+   ```c
+   <!-- Convert a binary string to an integer -->
+   char binary_str[] = "1011";
+   int value = 0;
+
+   for (int i = 0; binary_str[i] != '\0'; i++) {
+      value *= 2;
+      value += (binary_str[i] - '0');
+   }
+   ```
 
 7. Casting
 
@@ -218,9 +238,11 @@
     - 3-way partitioning
       - Split array into:
 
-        ```
-        < pivot1 | between | ≥ pivot2
-        ```
+      ```
+      - left: x < pivot1
+      - middle: pivot1 ≤ x < pivot2
+      - right: x ≥ pivot2
+      ```
 
       - Common mistakes:
         - using index instead of value
