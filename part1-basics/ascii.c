@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
   for (i = a; i <= b; i++) {
     /* Print the integer and its corresponding character */
-    printf("%d: %c\n", i, (char)i);
+    printf("%d: %c\n", i, i);
   }
 
   return 0;
