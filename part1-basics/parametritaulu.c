@@ -37,23 +37,30 @@ int main(int argc, char *argv[]) {
   int total_params;
   int max_index_width;
   int max_param_width;
+  int max_line_width;
 
   /* Calculate the maximum width for index and parameter columns */
   total_params = argc - 1;
   max_index_width = 1;
   max_param_width = 1;
+
+  while (total_params >= 10) {
+    total_params /= 10;
+    max_index_width++;
+  }
+
   for (i = 1; i < argc; i++) {
-    while (total_params >= 10) {
-      total_params /= 10;
-      max_index_width++;
-    }
     if (strlen(argv[i]) > max_param_width) {
       max_param_width = strlen(argv[i]);
     }
   }
 
+  /* Adjust max_line_width after calculating max_index_width and max_param_width
+   */
+  max_line_width = max_index_width + max_param_width + 7;
+
   /* Print the top border of the table */
-  for (i = 0; i < max_index_width + max_param_width + 7; i++) {
+  for (i = 0; i < max_line_width; i++) {
     printf("#");
   }
   printf("\n");
@@ -77,7 +84,7 @@ int main(int argc, char *argv[]) {
   }
 
   /* Print the bottom border of the table */
-  for (i = 0; i < max_index_width + max_param_width + 7; i++) {
+  for (i = 0; i < max_line_width; i++) {
     printf("#");
   }
   printf("\n");
