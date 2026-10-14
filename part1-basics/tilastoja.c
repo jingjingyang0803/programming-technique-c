@@ -33,22 +33,19 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    /* Initialize the first number and set it as both min and max */
     numbers[0] = atof(argv[1]);
     min = max = numbers[0];
-  
+
     /* Convert arguments and find min/max */
-    for (i = 0; i < n; i++) {
+    for (i = 1; i < n; i++) {
         numbers[i] = atof(argv[i + 1]);
 
-        if (i == 0) {
-            min = max = numbers[i];
-        } else {
-            if (numbers[i] < min)
-                min = numbers[i];
+        if (numbers[i] < min)
+            min = numbers[i];
 
-            if (numbers[i] > max)
-                max = numbers[i];
-        }
+        if (numbers[i] > max)
+            max = numbers[i];
     }
 
     printf("Pienin: %f\n", min);
@@ -60,7 +57,7 @@ int main(int argc, char *argv[]) {
             if (numbers[i] == numbers[j])
                 count[i]++;
         }
-
+        /* Update max_count if the current number's count exceeds it */
         if (count[i] > max_count)
             max_count = count[i];
     }
