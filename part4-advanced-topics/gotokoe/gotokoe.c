@@ -12,6 +12,16 @@ int max2D(int **t2d, int h, int w) {
   int j = 0;
   int max = t2d[0][0];
 
+  // for (int i = 0; i < h; i++) {
+  //     for (int j = 0; j < w; j++) {
+  //         if (t2d[i][j] > max) {
+  //             max = t2d[i][j];
+  //         }
+  //     }
+  // }
+
+  // return max;
+
   goto CHECK_I;
 
 CHECK_I:
