@@ -22,7 +22,8 @@ void viikko(int day, int month, int year) {
   aika.tm_mday = day;
   aika.tm_mon = month - 1;
   aika.tm_year = year - 1900;
-  aika.tm_isdst = -1;
+  aika.tm_isdst =
+      -1; /* Let mktime determine if Daylight Saving Time is in effect */
 
   mktime(&aika);
 
