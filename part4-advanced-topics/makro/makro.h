@@ -35,8 +35,12 @@ defined, the debug macro should do nothing.
 
 #define PII 3.141592653589793
 
-#define MJ_APU(x) #x
-#define MJ(x) MJ_APU(x)
+/* The # operator converts a macro argument into a string literal.
+ * Two levels of macros are needed to expand macro arguments before converting
+ * them into strings.
+ */
+#define MJ_APU(x) #x /* Stringifies the argument without expanding it first */
+#define MJ(x) MJ_APU(x) /* Expands the argument before passing it to MJ_APU */
 
 #ifndef DESIMAALIT
 #define DESIMAALIT 3
@@ -49,11 +53,11 @@ defined, the debug macro should do nothing.
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-#define MIN3(a, b, c) MIN(MIN((a), (b)), (c))
-#define MAX3(a, b, c) MAX(MAX((a), (b)), (c))
+#define MIN3(a, b, c) MIN(MIN(a, b), c)
+#define MAX3(a, b, c) MAX(MAX(a, b), c)
 
-#define MIN4(a, b, c, d) MIN(MIN3((a), (b), (c)), (d))
-#define MAX4(a, b, c, d) MAX(MAX3((a), (b), (c)), (d))
+#define MIN4(a, b, c, d) MIN(MIN3(a, b, c), d)
+#define MAX4(a, b, c, d) MAX(MAX3(a, b, c), d)
 
 #ifdef OTE_DEBUG
 #define debug(msg) fprintf(stderr, msg)
