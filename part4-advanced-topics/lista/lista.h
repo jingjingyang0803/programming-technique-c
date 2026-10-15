@@ -18,14 +18,14 @@ The linked list should support the following operations:
 
 typedef struct Solmu {
   void *data;
-  struct Solmu *seur;
+  struct Solmu *seur; /** Pointer to the next node in the list */
 } Solmu;
 
 typedef struct Lista {
-  Solmu *paa;
-  size_t dataKoko;
-  size_t n;
-  void (*tulostaArvo)(FILE *virta, const void *arvo);
+  Solmu *paa; /** Pointer to the first node of the list */
+  size_t dataKoko; /** Size of the data stored in each node */
+  size_t n; /** Number of nodes in the list */
+  void (*tulostaArvo)(FILE *virta, const void *arvo); /** Function pointer to print the value of a node */
 } Lista;
 
 Solmu *s_luo(const void *data, size_t dataKoko, Solmu *seur);
