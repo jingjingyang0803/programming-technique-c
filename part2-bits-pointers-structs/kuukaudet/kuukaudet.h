@@ -24,11 +24,9 @@ enum kuukausi {
   SYYSKUU,
   LOKAKUU,
   MARRASKUU,
-  JOULUKUU
+  JOULUKUU,
+  KK_LKM
 };
-
-/* Enum for number of months */
-enum KK_LKM { KK_LKM = 12 };
 
 /* Array of month names using all lowercase letters */
 extern const char *KK_NIMET[KK_LKM];
