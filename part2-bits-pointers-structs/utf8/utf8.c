@@ -43,10 +43,25 @@ void utf8_koodaa(unsigned int c, unsigned char utf8[]) {
     }
   }
 
+  /*
+  0x7F = 01111111
+  0x3F = 00111111
+
+  0x80 = 10000000
+  0xC0 = 11000000
+  0xE0 = 11100000
+  0xF0 = 11110000
+
+  header values for UTF-8 bytes
+  1-byte(7 bit value): 0xxxxxxx
+  2-byte(11 bit value): 110xxxxx 10xxxxxx
+  3-byte(16 bit value): 1110xxxx 10xxxxxx 10xxxxxx
+  4-byte(21 bit value): 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+  */
   /* Determine the UTF-8 code length based on the number of bits */
   if (num_bits <= 7) {
-    utf8[0] = c & 0x7F; /* Store the value in the last 7 bits */
-    utf8[1] = '\0';     /* Null-terminate the string */
+    utf8[0] = c;    /* Store the value in the last 7 bits */
+    utf8[1] = '\0'; /* Null-terminate the string */
   } else if (num_bits <= 11) {
     utf8[0] = (c >> 6) | 0xC0;   /* Set the first byte header (110xxxxx) */
     utf8[1] = (c & 0x3F) | 0x80; /* Set the second byte header (10xxxxxx) */
