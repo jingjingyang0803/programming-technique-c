@@ -2,115 +2,95 @@
 #include <stdio.h>
 #include <string.h>
 
-/* Days in each month, with a placeholder for the 0th month. */
-const unsigned int PV_KK[2][13] = {
-    {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}, /* Non-leap year */
-    {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}  /* Leap year */
-};
+/* Number of days in each month for normal and leap years. */
+static const int PV_KK[2][13] = {
+    {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+    {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
 
-/* Weekday abbreviations in Finnish. */
-const char *VK_PV[7] = {"su", "ma", "ti", "ke", "to", "pe", "la"};
+/* Finnish weekday abbreviations, starting from Sunday. */
+static const char *VK_PV[7] = {"su", "ma", "ti", "ke", "to", "pe", "la"};
 
-/* Reference date: 1.1.1000 () */
-const Pvm REFERENCE_DATE = {1, 1, 1000, ""};
-
-/* Helper function: Determines if a given year is a leap year. */
-int isLeapYear(unsigned int year) {
+/* Check whether a year is a leap year. */
+static int isLeapYear(int year) {
   return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
-/* Helper function: Calculates the weekday for a given date using Zeller's
- * Congruence. */
-void laske_viikonpaiva(Pvm *p) {
-  unsigned int d, m, y, K, J, h, vk_index;
-
-  d = p->pv;
-  m = p->kk;
-  y = p->vuosi;
-
-  /* Zeller's Congruence:
-   * h = (d + (13 * (m + 1)) / 5 + K + K / 4 + J / 4 + 5 * J) % 7
-   * where d = day of the month
-   *       m = month (3=March, 4=April, ..., 12=December, 13=January,
-   *                  14=February)
-   *       K = year % 100 (the last two digits of the year)
-   *       J = year / 100 (the first two digits of the year)
-   */
-  if (m <= 2) {
-    m += 12;
-    y -= 1;
-  }
-
-  K = y % 100;
-  J = y / 100;
-
-  h = (d + (13 * (m + 1)) / 5 + K + K / 4 + J / 4 + 5 * J) % 7;
-
-  /* Zeller: 0=Sunday */
-  vk_index =
-      (h + 6) %
-      7; /* Map Zeller's output to our weekday index (0=su, 1=ma, ..., 6=la) */
-
-  strcpy(p->vk_pv, VK_PV[vk_index]);
-}
-
-/* Helper function: Converts a date to the total number of days since a
- * reference date. */
-unsigned int dateToDays(const Pvm *p) {
-  unsigned int total;
-  unsigned int month;
-  unsigned int year;
-
-  /* Step 1: Start with the day of the month. */
-  total = p->pv;
-
-  /* Step 2: Add the days in the months of the current year. */
-  for (month = 1; month < p->kk; month++) {
-    total += PV_KK[isLeapYear(p->vuosi)][month];
-  }
-
-  /* Step 3: Add the days in the years before the current year. */
-  for (year = REFERENCE_DATE.vuosi; year < p->vuosi; year++) {
-    total += isLeapYear(year) ? 366 : 365;
-  }
-
-  return total;
-}
-
-Pvm *kasvataPvm(Pvm *p) {
-  int leap; /* Whether the current year is a leap year. */
-
-  /* Increment the day. */
-  p->pv += 1;
-  /* Check if the day exceeds the number of days in the month. */
-  leap = isLeapYear(p->vuosi);
-  if (p->pv > PV_KK[leap][p->kk]) { /* If the day exceeds the number of days in
-        the month */
-    p->pv = 1;                      /* Reset day to 1. */
-    p->kk += 1;                     /* Increment month. */
-    if (p->kk > 12) {               /* If the month exceeds 12 */
-      p->kk = 1;                    /* Reset month to 1. */
-      p->vuosi += 1;                /* Increment year. */
+/* Move the weekday forward by one day. */
+static void nextWeekday(Pvm *pvm) {
+  int i;
+  for (i = 0; i < 7; i++) {
+    if (strcmp(pvm->vk_pv, VK_PV[i]) == 0) {
+      strcpy(pvm->vk_pv, VK_PV[(i + 1) % 7]);
+      return;
     }
   }
-  /* Update the weekday. */
-  laske_viikonpaiva(p);
-
-  return p; /* Return the pointer to the incremented date. */
 }
 
-/* Calculate the total number of days from a reference date (e.g., 1.1.1900)
- * to each date and return the absolute difference. */
+/* Compare two dates without considering the weekday. */
+static int compareDates(const Pvm *a, const Pvm *b) {
+  if (a->vuosi != b->vuosi) {
+    return a->vuosi < b->vuosi ? -1 : 1;
+  }
+
+  if (a->kk != b->kk) {
+    return a->kk < b->kk ? -1 : 1;
+  }
+
+  if (a->pv != b->pv) {
+    return a->pv < b->pv ? -1 : 1;
+  }
+
+  return 0;
+}
+
+/* Increment the date by one day. */
+Pvm *kasvataPvm(Pvm *pvm) {
+  int leap = isLeapYear(pvm->vuosi);
+
+  pvm->pv++;
+
+  /* Move to the next month if the current month has ended. */
+  if (pvm->pv > PV_KK[leap][pvm->kk]) {
+    pvm->pv = 1;
+    pvm->kk++;
+
+    /* Move to the next year after December. */
+    if (pvm->kk > 12) {
+      pvm->kk = 1;
+      pvm->vuosi++;
+    }
+  }
+
+  nextWeekday(pvm);
+
+  return pvm;
+}
+
+/* Calculate the number of days between two dates. */
 unsigned int pvmEro(const Pvm *a, const Pvm *b) {
-  unsigned int days_a, days_b;
+  Pvm current;
+  const Pvm *later;
+  unsigned int days = 0;
 
-  days_a = dateToDays(a);
-  days_b = dateToDays(b);
+  /* Start from the earlier date without modifying the originals. */
+  if (compareDates(a, b) <= 0) {
+    current = *a;
+    later = b;
+  } else {
+    current = *b;
+    later = a;
+  }
 
-  /* Return the absolute difference in days. */
-  return (days_a > days_b) ? (days_a - days_b) : (days_b - days_a);
+  /* Count the days until the later date is reached. */
+  while (compareDates(&current, later) < 0) {
+    kasvataPvm(&current);
+    days++;
+  }
+
+  return days;
 }
 
+/* Print the date in the required Finnish format. */
 void tulostaPvm(Pvm *pvm) {
-  printf("%s %u.%u.%u", pvm->vk_pv, pvm->pv, pvm->kk, pvm->vuosi);
+  printf("%s %d.%d.%d", pvm->vk_pv, pvm->pv, pvm->kk, pvm->vuosi);
 }
