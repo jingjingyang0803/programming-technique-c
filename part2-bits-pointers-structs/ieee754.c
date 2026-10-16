@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
   size_t i;
   char *binary_str;
 
-  /*Variables to hold the sign bit, exponent bits, and fraction bits as
-   * strings, with null terminators */
+  /* Variables to hold the sign bit(1 bit), exponent bits(8 bits), and fraction
+   * bits(23 bits) as strings, with null terminators */
   char sign_bit;
   char exponent_bits[9];
   char fraction_bits[24];
@@ -54,12 +54,21 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  /* Extract the sign(first bit), exponent(8 bits following the sign), and
+   * fraction bits(23 bits following the exponent) from the input string */
   sign_bit = binary_str[0];
   strncpy(exponent_bits, binary_str + 1, 8);
   exponent_bits[8] = '\0';
   strncpy(fraction_bits, binary_str + 9, 23);
   fraction_bits[23] = '\0';
 
+  sign = (sign_bit == '0') ? '+' : '-';
+
+  /* Fraction calculation:
+   * The weight of each bit is a negative power of 2, starting from 2^-1 for the
+   * first bit.
+   * The overall fraction value is 1 + the sum of these weighted bits (implicit
+   * leading 1). */
   fraction_value = 0.0;
   for (i = 0; i < 23; i++) {
     if (fraction_bits[i] == '1') {
@@ -68,6 +77,9 @@ int main(int argc, char *argv[]) {
   }
   value_part = 1.0 + fraction_value;
 
+  /* Exponent calculation:
+   * The value is obtained by interpreting these bits as an unsigned integer
+   * and then subtracting the bias (127 for single-precision). */
   exponent_value = 0;
   for (i = 0; i < 8; i++) {
     if (exponent_bits[i] == '1') {
@@ -75,8 +87,6 @@ int main(int argc, char *argv[]) {
     }
   }
   exponent_value -= 127;
-
-  sign = (sign_bit == '0') ? '+' : '-';
 
   /* Calculate the overall value using ldexp,
    * which computes value_part * (2^exponent_value) */
